@@ -1,0 +1,11 @@
+Usage: node-injectmd [options]
+
+Options:
+  -h, --help        Output usage information
+  -v, --version     Output version number
+
+Examples:
+  $ node-injectmd   # Inject markdown into markdown
+
+Docs: https://github.com/TabDigital/node-injectmd
+Bugs: https://github.com/TabDigital/node-injectmd/issues
