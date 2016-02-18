@@ -1,4 +1,5 @@
 const exec = require('child_process').exec
+const fromString = require('from2-string')
 const waterfall = require('run-waterfall')
 const mkdirp = require('mkdirp')
 const rimraf = require('rimraf')
@@ -7,7 +8,7 @@ const test = require('tape')
 const fs = require('fs')
 
 test('should read and write files', function (t) {
-  t.plan(1)
+  t.plan(2)
 
   const tasks = [
     function createDir (next) {
@@ -17,16 +18,27 @@ test('should read and write files', function (t) {
       fs.readFile(path.join(__dirname, 'test/file.md'), 'utf8', next)
     },
     function writeFile (file, next) {
-      fs.writeFile(path.join(__dirname, 'tmp/in.md'), next)
+      fs.writeFile(path.join(__dirname, 'tmp/in.md'), file, next)
     },
-    function runTask (_, next) {
+    function runTask (next) {
       const cmd = path.join(__dirname, 'bin/cli.js')
       const args = ' -i ./tmp/in.md -t main-header'
-      exec(cmd + args, function (err, stdout, stderr) {
-        t.ifError(err, 'no error')
+      const child = exec(cmd + args)
+      child.stdout.pipe(process.stdout)
+      child.stderr.pipe(process.stderr)
+      const rs = fromString('# best header ever')
+      rs.pipe(child.stdin)
+
+      child.on('close', function () {
+        const expath = path.join(__dirname, 'test/expected.md')
+        const expected = fs.readFileSync(expath, 'utf8')
+        const respath = path.join(__dirname, 'tmp/in.md')
+        const result = fs.readFileSync(respath, 'utf8')
+        t.equal(result, expected, 'output is same')
+        next()
       })
     },
-    function cleanup (_, next) {
+    function cleanup (next) {
       rimraf(path.join(__dirname, 'tmp'), next)
     }
   ]
