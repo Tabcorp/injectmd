@@ -19,8 +19,8 @@ function nodeInjectmd (opts) {
 
   const inFile = opts.in
   const tag = opts.tag
-  const startTag = new RegExp('<!--START ' + tag + '-->')
-  const endTag = new RegExp('<!--END ' + tag + '-->')
+  const startTag = new RegExp('<!--\\s*START ' + tag + '\\s*-->')
+  const endTag = new RegExp('<!--\\s*END ' + tag + '\\s*-->')
 
   assert.equal(typeof opts, 'object', 'opts must be an object')
 
