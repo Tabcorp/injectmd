@@ -12,16 +12,16 @@ test('should read and write files', function (t) {
 
   const tasks = [
     function createDir (next) {
-      mkdirp(path.join(__dirname, 'tmp'), next)
+      mkdirp(path.join(__dirname, '../tmp'), next)
     },
     function readFile (_, next) {
-      fs.readFile(path.join(__dirname, 'test/file.md'), 'utf8', next)
+      fs.readFile(path.join(__dirname, 'fixtures/file.md'), 'utf8', next)
     },
     function writeFile (file, next) {
-      fs.writeFile(path.join(__dirname, 'tmp/in.md'), file, next)
+      fs.writeFile(path.join(__dirname, '../tmp/in.md'), file, next)
     },
     function runTask (next) {
-      const cmd = path.join(__dirname, 'bin/cli.js')
+      const cmd = path.join(__dirname, '../bin/cli.js')
       const args = ' -i ./tmp/in.md -t main-header'
       const child = exec(cmd + args)
       child.stdout.pipe(process.stdout)
@@ -30,16 +30,16 @@ test('should read and write files', function (t) {
       rs.pipe(child.stdin)
 
       child.on('close', function () {
-        const expath = path.join(__dirname, 'test/expected.md')
+        const expath = path.join(__dirname, 'fixtures/expected.md')
         const expected = fs.readFileSync(expath, 'utf8')
-        const respath = path.join(__dirname, 'tmp/in.md')
+        const respath = path.join(__dirname, '../tmp/in.md')
         const result = fs.readFileSync(respath, 'utf8')
         t.equal(result, expected, 'output is same')
         next()
       })
     },
     function cleanup (next) {
-      rimraf(path.join(__dirname, 'tmp'), next)
+      rimraf(path.join(__dirname, '../tmp'), next)
     }
   ]
 
