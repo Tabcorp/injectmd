@@ -1,5 +1,5 @@
 {
-  "name": "node-injectmd",
+  "name": "injectmd",
   "version": "1.0.0",
   "description": "Inject markdown into markdown",
   "main": "index.js",
