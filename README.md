@@ -35,7 +35,7 @@ Creates:
 ## Installation
 
 ```sh
-$ npm install node-injectmd
+$ npm install injectmd
 ```
 ## Related packages
 
