@@ -46,7 +46,7 @@ function nodeInjectmd (opts) {
     function parse (line) {
       if (startTag.test(line.trim())) {
         tagMode = true
-        const res = line + EOL + String(inBuf) + EOL
+        const res = line + EOL + String(inBuf) + EOL + EOL
         return res
       } else if (endTag.test(line.trim())) {
         tagMode = false
